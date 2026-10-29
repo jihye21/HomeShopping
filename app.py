@@ -203,10 +203,23 @@ st.markdown("---")
 # 정산 시각화 대조 대시보드 차트
 st.subheader("양사 정산 마진 및 재무 지표 시각화 대조")
 col_c1, col_c2 = st.columns(2)
+
 with col_c1:
-st.write("양사 최종 정산 이익 비교액 (원)")
-st.bar_chart(data=pd.DataFrame({"주체": ["기업", "협력사"], "순이익 (원)": [metrics["lotte_net_profit"], metrics["vendor_net_profit"]]}), x="주체", y="순이익 (원)", use_container_width=True)
+    lotte_profit = metrics["lotte_net_profit"]
+    vendor_profit = metrics["vendor_net_profit"]
+    chart_data_profit = pd.DataFrame({
+        "주체": ["기업", "협력사"], 
+        "순이익 (원)": [lotte_profit, vendor_profit]
+    })
+    st.bar_chart(data=chart_data_profit, x="주체", y="순이익 (원)", use_container_width=True)
+
 with col_c2:
-st.write("양사 마진율 방어선 대조 (%)")
-st.bar_chart(data=pd.DataFrame({"주체": ["기업 이익률", "협력사 이익률", "협력사 생존선"], "마진율 (%)": [metrics["lotte_net_margin_pct"], metrics["vendor_net_margin_pct"], 10.0]}), x="주체", y="마진율 (%)", use_container_width=True)
+    st.write("양사 마진율 방어선 대조 (%)")
+    lotte_margin = metrics["lotte_net_margin_pct"]
+    vendor_margin = metrics["vendor_net_margin_pct"]
+    chart_data_margin = pd.DataFrame({
+        "주체": ["기업 이익률", "협력사 이익률", "협력사 생존선"], 
+        "마진율 (%)": [lotte_margin, vendor_margin, 10.0]
+    })
+    st.bar_chart(data=chart_data_margin, x="주체", y="마진율 (%)", use_container_width=True)
 

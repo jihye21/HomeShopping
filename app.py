@@ -7,7 +7,7 @@ st.title("프로모션 시뮬레이터")
 st.markdown("---")
 
 # Codespace 내부 로컬 주소 바인딩
-BACKEND_API_URL = "http://localhost:8000/api/v1/simulate"
+BACKEND_API_URL = "http://127.0.0"
 
 st.sidebar.header("데이터")
 category = st.sidebar.selectbox("1. 상품 카테고리", ["패션", "뷰티", "가전"])

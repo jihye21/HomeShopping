@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+scipy
+streamlit
+requests
+pandas
+numpy

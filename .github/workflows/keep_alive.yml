@@ -1,0 +1,42 @@
+name: Keep Streamlit App Alive
+
+on:
+  schedule:
+    # 6시간마다
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Wake up Streamlit App
+        run: |
+          python -c "
+          from playwright.sync_api import sync_playwright
+          import time
+
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              page = browser.new_page()
+              page.goto('https://homeshopping-gw6udow2xsxiumj37y4dfh.streamlit.app/')
+              page.wait_for_timeout(15000) # 앱 로딩 및 WebSocket 연결을 위해 15초 대기
+              
+              # 깨우기
+              wake_button = page.locator('button:has-text(\"Yes, get this app back up!\")')
+              if wake_button.is_visible():
+                  wake_button.click()
+                  page.wait_for_timeout(30000) # 30초 대기
+                  
+              browser.close()
+          "
